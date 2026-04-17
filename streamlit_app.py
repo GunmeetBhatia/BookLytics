@@ -169,8 +169,8 @@ def build_preprocessor():
         ohe = OneHotEncoder(handle_unknown="ignore", sparse=False)
 
     text_pipe = Pipeline([
-        ("tfidf", TfidfVectorizer(max_features=800, stop_words="english")),
-        ("svd", TruncatedSVD(n_components=15, random_state=42))
+        ("tfidf", TfidfVectorizer(max_features=150, stop_words="english")),
+        ("svd", TruncatedSVD(n_components=5, random_state=42))
     ])
 
     return ColumnTransformer([
@@ -179,7 +179,7 @@ def build_preprocessor():
         ("num", StandardScaler(), ["price_clean", "num_ratings"])
     ])
 
-
+@st.cache_resource
 def train_models(df):
     X = df[["title", "author", "price_clean", "num_ratings"]].fillna(0)
     y_cls = df["target"]
@@ -187,12 +187,12 @@ def train_models(df):
 
     clf = Pipeline([
         ("pre", build_preprocessor()),
-        ("model", RandomForestClassifier(n_estimators=80, n_jobs=-1, random_state=42))
+        ("model", RandomForestClassifier(n_estimators=10, n_jobs=-1, random_state=42))
     ])
 
     reg = Pipeline([
         ("pre", build_preprocessor()),
-        ("model", RandomForestRegressor(n_estimators=80, n_jobs=-1, random_state=42))
+        ("model", RandomForestRegressor(n_estimators=10, n_jobs=-1, random_state=42))
     ])
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -202,10 +202,9 @@ def train_models(df):
     clf.fit(X_train, y_train)
     reg.fit(X, y_reg)
 
-    
+    return clf, reg
 
-    preds = clf.predict(X_test)
-    return accuracy_score(y_test, preds)
+    
 
 
 # ======================================================
@@ -219,8 +218,7 @@ if df.empty:
     st.warning("Upload dataset to continue.")
     st.stop()
 
-    train_models(df)
-
+with st.spinner("Training model... please wait"):
     clf, reg = train_models(df)
 
 # ======================================================
@@ -258,8 +256,7 @@ author = st.text_input("Author", key="pred_author")
 if st.button("Predict", key="predict_btn"):
 
 
-        clf = joblib.load(CLS_MODEL_PATH)
-        reg = joblib.load(REG_MODEL_PATH)
+        
 
         # Auto-fill missing numeric fields
         Xnew = pd.DataFrame([{
@@ -276,9 +273,7 @@ if st.button("Predict", key="predict_btn"):
         st.metric("Predicted Rating", f"{rating:.2f}")
 
     
-# ======================================================
-# MARKET SEGMENTATION (RESTORED)
-# ======================================================
+
 
 # ======================================================
 # MARKET SEGMENTATION (DETAILED VERSION)
