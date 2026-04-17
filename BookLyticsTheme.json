@@ -1,0 +1,51 @@
+{
+  "name": "BookLytics Dark Theme",
+  "background": "#1E1B2E",
+  "foreground": "#FFFFFF",
+  "tableAccent": "#7A5CF2",
+
+  "dataColors": [
+    "#00D2D2",
+    "#7A5CF2",
+    "#C9B6FF",
+    "#4ECDC4",
+    "#FF6F91",
+    "#556EE6"
+  ],
+
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          { "color": "#1E1B2E", "transparency": 0 }
+        ],
+        "color": [
+          { "color": "#FFFFFF" }
+        ],
+        "title": [
+          {
+            "fontSize": 14,
+            "color": "#C9B6FF"
+          }
+        ]
+      }
+    },
+
+    "card": {
+      "*": {
+        "background": [
+          { "color": "#2A2640", "transparency": 0 }
+        ],
+        "color": [
+          { "color": "#00D2D2" }
+        ],
+        "title": [
+          {
+            "color": "#C9B6FF",
+            "fontSize": 12
+          }
+        ]
+      }
+    }
+  }
+}
