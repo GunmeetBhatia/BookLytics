@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import re
-import joblib
+
 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -202,8 +202,7 @@ def train_models(df):
     clf.fit(X_train, y_train)
     reg.fit(X, y_reg)
 
-    joblib.dump(clf, CLS_MODEL_PATH)
-    joblib.dump(reg, REG_MODEL_PATH)
+    
 
     preds = clf.predict(X_test)
     return accuracy_score(y_test, preds)
@@ -221,6 +220,8 @@ if df.empty:
     st.stop()
 
     train_models(df)
+
+    clf, reg = train_models(df)
 
 # ======================================================
 # DATA OVERVIEW
