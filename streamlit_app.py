@@ -220,6 +220,8 @@ if df.empty:
     st.warning("Upload dataset to continue.")
     st.stop()
 
+    train_models(df)
+
 # ======================================================
 # DATA OVERVIEW
 # ======================================================
@@ -242,9 +244,6 @@ selected_book = st.selectbox(
 if selected_book:
     book_data = df[df["title"] == selected_book]
     st.write(book_data)
-# ======================================================
-# PREDICTION
-# ======================================================
 
 # ======================================================
 # PREDICTION (TITLE + AUTHOR ONLY)
@@ -256,7 +255,7 @@ title = st.text_input("Title", key="pred_title")
 author = st.text_input("Author", key="pred_author")
 
 if st.button("Predict", key="predict_btn"):
-    if CLS_MODEL_PATH.exists():
+
 
         clf = joblib.load(CLS_MODEL_PATH)
         reg = joblib.load(REG_MODEL_PATH)
@@ -275,8 +274,7 @@ if st.button("Predict", key="predict_btn"):
         st.metric("Probability ≥ 4.0", f"{prob:.2f}")
         st.metric("Predicted Rating", f"{rating:.2f}")
 
-    else:
-        st.warning("Train model first.")
+    
 # ======================================================
 # MARKET SEGMENTATION (RESTORED)
 # ======================================================
